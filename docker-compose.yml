@@ -1,0 +1,6 @@
+services:
+  reverseproxy:
+    image: ${DOCKER_REGISTRY-}reverseproxy
+    build:
+      context: src/ReverseProxy
+      dockerfile: Dockerfile
