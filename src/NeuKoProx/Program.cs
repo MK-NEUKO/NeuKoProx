@@ -3,6 +3,18 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLettuceEncrypt();
+builder.WebHost.ConfigureKestrel(kestrel =>
+{
+    kestrel.ListenAnyIP(443, portOptions =>
+    {
+        portOptions.UseHttps(h =>
+        {
+            h.UseLettuceEncrypt(kestrel.ApplicationServices);
+        });
+    });
+});
+
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
